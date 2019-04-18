@@ -15,8 +15,8 @@ def inside(cardcode):
         assert (len(cardcode) == 6)
         cardcode = int(cardcode)
     except:
-        return jsonify(returnMsg.returnMsg["400"])
-    msg = returnMsg.returnMsg["Return Card Info"]
+        return jsonify(returnMsg.returnMsgTest().four_hundred)
+    msg = returnMsg.returnMsgTest().return_card_info
     record = [record for record in sqlQuery.get_card_info(cardcode)]
     print(record)
     if len(record) == 1:
@@ -40,7 +40,7 @@ def login():
             assert (len(str(cardcode)) == 6)
             cardcode = int(cardcode)
         except:
-            return jsonify(returnMsg.returnMsg["400"])
+            return jsonify(returnMsg.returnMsgTest().four_hundred)
         dataReturnFromSQL = [record for record in sqlQuery.get_cardcode_password(cardcode)]
         if len(dataReturnFromSQL) == 1:
             cardcodeCheck, cardcodeCheckPassword, people_id = dataReturnFromSQL[0]
@@ -50,13 +50,13 @@ def login():
             else:
                 pass
             if cardcodeCheckPassword == password:
-                msg = returnMsg.returnMsg["Return Token"]
+                msg = returnMsg.returnMsgTest().return_token
                 msg['msg'] = functions.generate_auth_token(cardcode, people_id)
                 return jsonify(msg)
             else:
-                return jsonify(returnMsg.returnMsg["Username or Password Incorrect"])
+                return jsonify(returnMsg.returnMsgTest().username_or_password_incorrect)
         elif len(dataReturnFromSQL) == 0:
-            return jsonify(returnMsg.returnMsg["Username or Password Incorrect"])
+            return jsonify(returnMsg.returnMsgTest().username_or_password_incorrect)
         else:
             abort(500)
     else:
@@ -68,11 +68,11 @@ def login():
 def firstlogin(guardMsg):
     if request.is_json:
         if guardMsg == 'Warn':
-            return jsonify(returnMsg.returnMsg["400"])
+            return jsonify(returnMsg.returnMsgTest().four_hundred)
         else:
             password = request.json.get('password')
             sqlQuery.change_password(guardMsg, password)
-            return jsonify(returnMsg.returnMsg["Password change successfully"])
+            return jsonify(returnMsg.returnMsgTest().password_change_successfully)
     else:
         abort(405)
 
@@ -81,12 +81,11 @@ def firstlogin(guardMsg):
 @functions.login_required
 def transactions(guardMsg):
     if guardMsg == 'Warn':
-        return jsonify(returnMsg.returnMsg["400"])
+        return jsonify(returnMsg.returnMsgTest().four_hundred)
     elif guardMsg == 'Expired':
-        return jsonify(returnMsg.returnMsg["Token Expired"])
+        return jsonify(returnMsg.returnMsgTest().token_expired)
     else:
-        msg = returnMsg.returnMsg["Return Transaction List"]
-        msg['msg'] = {}
+        msg = returnMsg.returnMsgTest().return_transaction_list
         for record in sqlQuery.get_transactions(guardMsg):
             id, value_transaction, time, location, details = [value for value in record]
             if details != None:
@@ -103,17 +102,17 @@ def transactions(guardMsg):
 @functions.login_required
 def cardinfo(guardMsg):
     if guardMsg == 'Warn':
-        return jsonify(returnMsg.returnMsg["400"])
+        return jsonify(returnMsg.returnMsgTest().four_hundred)
     elif guardMsg == 'Expired':
-        return jsonify(returnMsg.returnMsg["Token Expired"])
+        return jsonify(returnMsg.returnMsgTest().token_expired)
     else:
-        msg = returnMsg.returnMsg["Return Card Info"]
+        msg = returnMsg.returnMsgTest().return_card_info
         if int(str(guardMsg)[0]) == 6:
             cardcode_type = 'Tich luy'
         elif int(str(guardMsg)[0]) == 7 or int(str(guardMsg)[0]) == 9:
             cardcode_type = 'Vi uu dai'
         else:
-            return jsonify(returnMsg.returnMsg["400"])
+            return jsonify(returnMsg.returnMsgTest().four_hundred)
         record = [value for value in sqlQuery.get_card_info(guardMsg, cardcode_type)]
         if len(record) == 1:
             CARD_CODE, PEOPLE_ID, F_NAME, L_NAME, FULL_NAME, TEXT_PASSWORD, BIRTHDAY, SOURCE, BALANCE, HANG_THE = record[0]
@@ -132,11 +131,11 @@ def cardinfo(guardMsg):
 @functions.login_required
 def coupons(guardMsg):
     if guardMsg == 'Warn':
-        return jsonify(returnMsg.returnMsg["400"])
+        return jsonify(returnMsg.returnMsgTest().four_hundred)
     elif guardMsg == 'Expired':
-        return jsonify(returnMsg.returnMsg["Token Expired"])
+        return jsonify(returnMsg.returnMsgTest().token_expired)
     else:
-        msg = returnMsg.returnMsg["Return Coupons Of Card"]
+        msg = returnMsg.returnMsgTest().return_coupons_of_card
         records = [value for value in sqlQuery.get_coupons(guardMsg)]
         for record in records:
             cardcode, peopleID, couponID, couponCode, couponName, Datefrom, Dateto, Flag = record
