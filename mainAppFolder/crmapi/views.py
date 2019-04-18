@@ -86,16 +86,16 @@ def transactions(guardMsg):
         return jsonify(returnMsg.returnMsg["Token Expired"])
     else:
         msg = returnMsg.returnMsg["Return Transaction List"]
-        print(len(sqlQuery.get_transactions(guardMsg)))
+        msg['msg'] = {}
         for record in sqlQuery.get_transactions(guardMsg):
-            id, value, time, location, details = [value for value in record]
+            id, value_transaction, time, location, details = [value for value in record]
             if details != None:
                 details = functions.convert_xml_json(details)
                 details = details['CHECK']['CHECKDATA']['CHECKLINES']['LINE']
             try:
-                msg['msg'][id] = {'value': float(value), 'location': location, 'time': time[:-15], 'details': details}
+                msg['msg'][id] = {'value': float(value_transaction), 'location': location, 'time': time[:-15], 'details': details}
             except:  # value variable can be none but float() not happy with that
-                msg['msg'][id] = {'value': value, 'location': location, 'time': time[:-15], 'details': details}
+                msg['msg'][id] = {'value': value_transaction, 'location': location, 'time': time[:-15], 'details': details}
         return jsonify(msg)
 
 
