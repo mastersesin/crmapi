@@ -52,7 +52,7 @@ def change_password(CardCode, CardCode_password):
     app.config['SqlState'] = True
 
 
-def get_transactions(CardCode):
+def get_transactions(CardCode, date_from, date_to):
     while not app.config['SqlState']:
         continue
     app.config['SqlState'] = False
@@ -66,8 +66,8 @@ def get_transactions(CardCode):
                                 JOIN CARD_TRANSACTIONS ON CARD_TRANSACTIONS.ACCOUNT_ID = CARD_PEOPLE_ACCOUNTS.PEOPLE_ACCOUNT_ID
                                 LEFT JOIN CARD_CLIENTS ON CARD_TRANSACTIONS.CLIENT_ID = CARD_CLIENTS.CLIENT_ID
                                 LEFT JOIN CARD_TRANSACTION_NOTES ON CARD_TRANSACTIONS.TRANSACTION_ID = CARD_TRANSACTION_NOTES.TRANSACTION_ID
-                                WHERE CARD_CARDS.CARD_CODE = '{}'
-                              """.format(CardCode))
+                                WHERE CARD_CARDS.CARD_CODE = '{}' AND CARD_TRANSACTIONS.TRANSACTION_TIME >= '{}' AND CARD_TRANSACTIONS.TRANSACTION_TIME < '{}' 
+                              """.format(CardCode, date_from, date_to))
     records = myfile.fetchall()
     myfile.close()
     del myfile

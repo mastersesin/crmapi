@@ -1,5 +1,6 @@
 from flask import request, jsonify, Blueprint, abort
 from mainAppFolder.crmapi import functions, returnMsg, sqlQuery
+from datetime import datetime
 
 # from mainAppFolder.crmapi import testProject3
 crmapiApp = Blueprint('crmapiApp', __name__)
@@ -45,7 +46,7 @@ def login():
         if len(dataReturnFromSQL) == 1:
             cardcodeCheck, cardcodeCheckPassword, people_id = dataReturnFromSQL[0]
             print(cardcodeCheck, cardcodeCheckPassword, people_id)
-            if cardcodeCheckPassword == None:
+            if not cardcodeCheckPassword:
                 cardcodeCheckPassword = '19801980'
             else:
                 pass
@@ -80,13 +81,21 @@ def firstlogin(guardMsg):
 @crmapiApp.route('/transactions', methods=['GET'])
 @functions.login_required
 def transactions(guardMsg):
+    date_from = request.args.get('from')
+    date_to = request.args.get('to')
+    if not date_from or not date_to:
+        date_from = '1970-1-1'
+        timenow = datetime.now()
+        date_to = '{}-{}-{}'.format(timenow.year, timenow.month, timenow.day)
+    else:
+        pass
     if guardMsg == 'Warn':
         return jsonify(returnMsg.returnMsgTest().four_hundred)
     elif guardMsg == 'Expired':
         return jsonify(returnMsg.returnMsgTest().token_expired)
     else:
         msg = returnMsg.returnMsgTest().return_transaction_list
-        for record in sqlQuery.get_transactions(guardMsg):
+        for record in sqlQuery.get_transactions(guardMsg, date_from, date_to):
             id, value_transaction, time, location, details = [value for value in record]
             if details != None:
                 details = functions.convert_xml_json(details)
