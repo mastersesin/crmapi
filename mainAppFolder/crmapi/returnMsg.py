@@ -46,7 +46,7 @@ class returnMsgTest():
         self.register_success = {"code": 1, "msg": "User created successfully."}
         self.username_or_password_incorrect = {"code": 5, "msg": "Username or Password Incorrect"}
         self.return_token = {"code": 6, "msg": ""}  # Dynamic msg so not show here
-        self.four_hundred = {"code": 7, "msg": {"Required form is missing or not in correct format"}}
+        self.four_hundred = {"code": 7, "msg": "Required form is missing or not in correct format"}
         self.password_change_successfully = {"code": 9, "msg": "Password has changed successfully."}
         self.return_transaction_list = {"code": 10, "msg": {}}
         self.return_card_info = {"code": 11, "msg": {}}
