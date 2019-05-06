@@ -52,7 +52,6 @@ def change_password(CardCode, CardCode_password):
     myfile.close()
     del myfile
     cnxn.close()
-    app.config['SqlState'] = True
 
 
 def get_transactions(CardCode, date_from, date_to):
@@ -77,6 +76,7 @@ def get_transactions(CardCode, date_from, date_to):
     myfile.close()
     del myfile
     cnxn.close()
+    return records
 
 
 def get_card_info(CardCode, card_code_type):
@@ -146,3 +146,4 @@ def get_coupons(CardCode):
     myfile.close()
     del myfile
     cnxn.close()
+    return records
