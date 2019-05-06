@@ -153,3 +153,14 @@ def coupons(guardMsg):
             else:
                 pass
         return jsonify(msg)
+
+@crmapiApp.route('/logout', methods=['POST'])
+@functions.login_required
+def logout(guardMsg):
+    if guardMsg == 'Warn':
+        return jsonify(returnMsg.returnMsgTest().four_hundred)
+    elif guardMsg == 'Expired':
+        return jsonify(returnMsg.returnMsgTest().token_expired)
+    else:
+        msg = returnMsg.returnMsgTest().logout
+        return jsonify(msg)

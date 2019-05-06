@@ -52,6 +52,7 @@ class returnMsgTest():
         self.return_card_info = {"code": 11, "msg": {}}
         self.token_expired = {"code": 13, "msg": "Token Expired"}
         self.return_coupons_of_card = {"code": 12, "msg": {}}
+        self.logout = {"code": 13, "msg": "Logout successfully."}
 
     def register_success(self):
         return self.register_success
@@ -76,3 +77,6 @@ class returnMsgTest():
 
     def token_expired(self):
         return self.token_expired
+
+    def logout(self):
+        return self.logout
