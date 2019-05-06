@@ -9,11 +9,13 @@ password = 'rk7'
 
 
 def get_cardcode_password(CardCode):
-    while not app.config['SqlState']:
-        continue
-    app.config['SqlState'] = False
     cnxn = pyodbc.connect(
-        'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+        'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server +
+        ';DATABASE=' + database +
+        ';UID=' + username +
+        ';PWD=' + password +
+        ';MARS_Connection=Yes'
+    )
     myfile = cnxn.cursor()
     myfile.execute("""select 
                                 CARD_CARDS.CARD_CODE,
@@ -26,16 +28,17 @@ def get_cardcode_password(CardCode):
     myfile.close()
     del myfile
     cnxn.close()
-    app.config['SqlState'] = True
     return records
 
 
 def change_password(CardCode, CardCode_password):
-    while not app.config['SqlState']:
-        continue
-    app.config['SqlState'] = False
     cnxn = pyodbc.connect(
-        'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+        'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server +
+        ';DATABASE=' + database +
+        ';UID=' + username +
+        ';PWD=' + password +
+        ';MARS_Connection=Yes'
+    )
     myfile = cnxn.cursor()
     myfile.execute("""UPDATE
                                 CARD_CARDS
@@ -53,11 +56,13 @@ def change_password(CardCode, CardCode_password):
 
 
 def get_transactions(CardCode, date_from, date_to):
-    while not app.config['SqlState']:
-        continue
-    app.config['SqlState'] = False
     cnxn = pyodbc.connect(
-        'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+        'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server +
+        ';DATABASE=' + database +
+        ';UID=' + username +
+        ';PWD=' + password +
+        ';MARS_Connection=Yes'
+    )
     myfile = cnxn.cursor()
     cnxn.add_output_converter(-155, handle_datetimeoffset)
     myfile.execute("""SELECT CARD_TRANSACTIONS.TRANSACTION_ID, CARD_TRANSACTIONS.SUMM,CARD_TRANSACTIONS.TRANSACTION_TIME,CARD_CLIENTS.NAME,CARD_TRANSACTION_NOTES.XML_CHECK
@@ -72,18 +77,17 @@ def get_transactions(CardCode, date_from, date_to):
     myfile.close()
     del myfile
     cnxn.close()
-    app.config['SqlState'] = True
-    return records
 
 
 def get_card_info(CardCode, card_code_type):
-    while not app.config['SqlState']:
-        continue
-    app.config['SqlState'] = False
     cnxn = pyodbc.connect(
-        'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+        'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server +
+        ';DATABASE=' + database +
+        ';UID=' + username +
+        ';PWD=' + password +
+        ';MARS_Connection=Yes'
+    )
     myfile = cnxn.cursor()
-
     myfile.execute("""SELECT
                                 CARD_CARDS.CARD_CODE,
                                 CARD_CARDS.PEOPLE_ID,
@@ -118,17 +122,17 @@ def get_card_info(CardCode, card_code_type):
                             """.format(card_code_type, CardCode))
     records = myfile.fetchall()
     del myfile
-    cnxn.close()
-    app.config['SqlState'] = True
     return records
 
 
 def get_coupons(CardCode):
-    while not app.config['SqlState']:
-        continue
-    app.config['SqlState'] = False
     cnxn = pyodbc.connect(
-        'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+        'DRIVER={ODBC Driver 17 for SQL Server};SERVER=' + server +
+        ';DATABASE=' + database +
+        ';UID=' + username +
+        ';PWD=' + password +
+        ';MARS_Connection=Yes'
+    )
     myfile = cnxn.cursor()
     myfile.execute("""SELECT CARD_CARDS.CARD_CODE,CARD_COUPONS.PEOPLE_ID,COUPON_ID,COUPON_CODE,CARD_COUPON_TYPES.NAME,DATE_FROM,DATE_TO,CARD_COUPONS.FLAGS
                         FROM CARD_COUPONS
@@ -142,5 +146,3 @@ def get_coupons(CardCode):
     myfile.close()
     del myfile
     cnxn.close()
-    app.config['SqlState'] = True
-    return records
