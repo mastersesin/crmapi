@@ -10,6 +10,7 @@ crmapiApp = Blueprint('crmapiApp', __name__)
 def index():
     return "<h1>HYG CRM API</h1>"
 
+
 @crmapiApp.route('/hycheck/<cardcode>', methods=['GET'])
 def inside(cardcode):
     try:
@@ -52,6 +53,10 @@ def login():
                 pass
             if cardcodeCheckPassword == password:
                 msg = returnMsg.returnMsgTest().return_token
+                if cardcodeCheckPassword == '19801980':
+                    msg['isFirstLogin'] = True
+                else:
+                    msg['isFirstLogin'] = False
                 msg['msg'] = functions.generate_auth_token(cardcode, people_id)
                 return jsonify(msg)
             else:
@@ -101,9 +106,11 @@ def transactions(guardMsg):
                 details = functions.convert_xml_json(details)
                 details = details['CHECK']['CHECKDATA']['CHECKLINES']['LINE']
             try:
-                msg['msg'][id] = {'value': float(value_transaction), 'location': location, 'time': time[:-15], 'details': details}
+                msg['msg'][id] = {'value': float(value_transaction), 'location': location, 'time': time[:-15],
+                                  'details': details}
             except:  # value variable can be none but float() not happy with that
-                msg['msg'][id] = {'value': value_transaction, 'location': location, 'time': time[:-15], 'details': details}
+                msg['msg'][id] = {'value': value_transaction, 'location': location, 'time': time[:-15],
+                                  'details': details}
         return jsonify(msg)
 
 
@@ -124,13 +131,16 @@ def cardinfo(guardMsg):
             return jsonify(returnMsg.returnMsgTest().four_hundred)
         record = [value for value in sqlQuery.get_card_info(guardMsg, cardcode_type)]
         if len(record) == 1:
-            CARD_CODE, PEOPLE_ID, F_NAME, L_NAME, FULL_NAME, TEXT_PASSWORD, BIRTHDAY, SOURCE, BALANCE, HANG_THE = record[0]
+            CARD_CODE, PEOPLE_ID, F_NAME, L_NAME, FULL_NAME, TEXT_PASSWORD, BIRTHDAY, SOURCE, BALANCE, HANG_THE = \
+                record[0]
             try:
                 msg['msg'] = {'CARD_CODE': CARD_CODE, 'PEOPLE_ID': PEOPLE_ID, 'F_NAME': F_NAME, 'L_NAME': L_NAME,
-                              'BIRTHDAY': BIRTHDAY, 'SOURCE': SOURCE, 'BALANCE': float(BALANCE), 'TYPE': cardcode_type, 'RANK': HANG_THE}
+                              'BIRTHDAY': BIRTHDAY, 'SOURCE': SOURCE, 'BALANCE': float(BALANCE), 'TYPE': cardcode_type,
+                              'RANK': HANG_THE}
             except:  # BALANCE variable can be none but float() not happy with that
                 msg['msg'] = {'CARD_CODE': CARD_CODE, 'PEOPLE_ID': PEOPLE_ID, 'F_NAME': F_NAME, 'L_NAME': L_NAME,
-                              'BIRTHDAY': BIRTHDAY, 'SOURCE': SOURCE, 'BALANCE': BALANCE, 'TYPE': cardcode_type, 'RANK': HANG_THE}
+                              'BIRTHDAY': BIRTHDAY, 'SOURCE': SOURCE, 'BALANCE': BALANCE, 'TYPE': cardcode_type,
+                              'RANK': HANG_THE}
             return jsonify(msg)
         else:
             abort(500)
@@ -153,6 +163,7 @@ def coupons(guardMsg):
             else:
                 pass
         return jsonify(msg)
+
 
 @crmapiApp.route('/logout', methods=['POST'])
 @functions.login_required
