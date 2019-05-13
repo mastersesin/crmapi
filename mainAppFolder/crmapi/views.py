@@ -159,7 +159,9 @@ def coupons(guardMsg):
         for record in records:
             cardcode, peopleID, couponID, couponCode, couponName, Datefrom, Dateto, Flag = record
             if Flag == 49:  # Flag 49 mean not yet used
-                msg['msg'].update({couponID: {'name': couponName, 'issued': Datefrom, 'expire': Dateto}})
+                msg['msg'].update({couponID: {'name': couponName, 'issued': Datefrom, 'flag': 'Chưa sử dụng'}})
+            elif Flag == 51:
+                msg['msg'].update({couponID: {'name': couponName, 'issued': Datefrom, 'flag': 'Đã sử dụng'}})
             else:
                 pass
         return jsonify(msg)
