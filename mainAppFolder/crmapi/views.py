@@ -136,8 +136,10 @@ def cardinfo(guardMsg):
         msg = returnMsg.returnMsgTest().return_card_info
         if int(str(guardMsg)[0]) == 6:
             cardcode_type = 'Tich luy'
+            balance_type = 'ACCUMULATION'
         elif int(str(guardMsg)[0]) == 7 or int(str(guardMsg)[0]) == 9:
             cardcode_type = 'Vi uu dai'
+            balance_type = 'BALANCE'
         else:
             return jsonify(returnMsg.returnMsgTest().four_hundred)
         record = [value for value in sqlQuery.get_card_info(guardMsg, cardcode_type)]
@@ -146,12 +148,13 @@ def cardinfo(guardMsg):
                 record[0]
             try:
                 msg['msg'] = {'CARD_CODE': CARD_CODE, 'PEOPLE_ID': PEOPLE_ID, 'F_NAME': F_NAME, 'L_NAME': L_NAME,
-                              'BIRTHDAY': BIRTHDAY, 'SOURCE': SOURCE, 'BALANCE': float(BALANCE), 'TYPE': cardcode_type,
+                              'BIRTHDAY': BIRTHDAY, 'SOURCE': SOURCE, balance_type: float(BALANCE), 'TYPE': cardcode_type,
                               'RANK': HANG_THE}
             except:  # BALANCE variable can be none but float() not happy with that
                 msg['msg'] = {'CARD_CODE': CARD_CODE, 'PEOPLE_ID': PEOPLE_ID, 'F_NAME': F_NAME, 'L_NAME': L_NAME,
-                              'BIRTHDAY': BIRTHDAY, 'SOURCE': SOURCE, 'BALANCE': BALANCE, 'TYPE': cardcode_type,
+                              'BIRTHDAY': BIRTHDAY, 'SOURCE': SOURCE, balance_type: BALANCE, 'TYPE': cardcode_type,
                               'RANK': HANG_THE}
+            print(msg)
             return jsonify(msg)
         else:
             abort(500)
@@ -170,7 +173,13 @@ def coupons(guardMsg):
         for record in records:
             cardcode, peopleID, couponID, couponCode, couponName, Datefrom, Dateto, Flag = record
             if Flag == 49:  # Flag 49 mean not yet used
-                msg['msg'].update({couponID: {'name': couponName, 'issued': Datefrom, 'flag': 'Chưa sử dụng'}})
+                msg['msg'].update(
+                    {couponID: {
+                        'name': couponName,
+                        'couponID': couponID,
+                        'Dateto': Dateto,
+                        'qrlink': '/qrcode/{}'.format(couponID)
+                    }})
             elif Flag == 51:
                 # msg['msg'].update({couponID: {'name': couponName, 'issued': Datefrom, 'flag': 'Đã sử dụng'}})
                 pass

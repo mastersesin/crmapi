@@ -1,0 +1,17 @@
+Click==7.0
+colorama==0.4.1
+Django==2.2.2
+Flask==1.0.3
+Flask-Cors==3.0.7
+image==1.5.27
+itsdangerous==1.1.0
+Jinja2==2.10.1
+MarkupSafe==1.1.1
+Pillow==6.0.0
+pyodbc==4.0.26
+pytz==2019.1
+qrcode==6.1
+six==1.12.0
+sqlparse==0.3.0
+Werkzeug==0.15.4
+xmltodict==0.12.0
