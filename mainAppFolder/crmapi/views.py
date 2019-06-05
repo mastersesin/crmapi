@@ -1,6 +1,8 @@
-from flask import request, jsonify, Blueprint, abort
+from flask import request, jsonify, Blueprint, abort, send_file
 from mainAppFolder.crmapi import functions, returnMsg, sqlQuery
 from datetime import datetime
+import qrcode
+from io import BytesIO
 
 # from mainAppFolder.crmapi import testProject3
 crmapiApp = Blueprint('crmapiApp', __name__)
@@ -8,7 +10,16 @@ crmapiApp = Blueprint('crmapiApp', __name__)
 
 @crmapiApp.route('/', methods=['GET'])
 def index():
-    return "<h1>HYG CRM API</h1>"
+    return "<h1>HYG CRM</h1>"
+
+
+@crmapiApp.route('/qrcode/<couponcode>', methods=['GET'])
+def qrcode(couponcode):
+    temp = BytesIO()
+    img = functions.random_qr(couponcode)
+    img.save(temp, 'PNG')
+    temp.seek(0)
+    return send_file(temp, mimetype='image/png')
 
 
 @crmapiApp.route('/hycheck/<cardcode>', methods=['GET'])
@@ -161,7 +172,8 @@ def coupons(guardMsg):
             if Flag == 49:  # Flag 49 mean not yet used
                 msg['msg'].update({couponID: {'name': couponName, 'issued': Datefrom, 'flag': 'Chưa sử dụng'}})
             elif Flag == 51:
-                msg['msg'].update({couponID: {'name': couponName, 'issued': Datefrom, 'flag': 'Đã sử dụng'}})
+                # msg['msg'].update({couponID: {'name': couponName, 'issued': Datefrom, 'flag': 'Đã sử dụng'}})
+                pass
             else:
                 pass
         return jsonify(msg)
