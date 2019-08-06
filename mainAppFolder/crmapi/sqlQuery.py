@@ -46,6 +46,7 @@ def change_password(CardCode, CardCode_password):
                                 TEXT_PASSWORD = '{1}'
                                 WHERE
                                 CARD_CODE = '{0}'
+                                '*Rb180219'
                           """.format(CardCode, CardCode_password))
     #    print('GoGo')
     cnxn.commit()
@@ -70,7 +71,7 @@ def get_transactions(CardCode, date_from, date_to):
                                 JOIN CARD_TRANSACTIONS ON CARD_TRANSACTIONS.ACCOUNT_ID = CARD_PEOPLE_ACCOUNTS.PEOPLE_ACCOUNT_ID
                                 LEFT JOIN CARD_CLIENTS ON CARD_TRANSACTIONS.CLIENT_ID = CARD_CLIENTS.CLIENT_ID
                                 LEFT JOIN CARD_TRANSACTION_NOTES ON CARD_TRANSACTIONS.TRANSACTION_ID = CARD_TRANSACTION_NOTES.TRANSACTION_ID
-                                WHERE CARD_CARDS.CARD_CODE = '{}' AND CARD_TRANSACTIONS.TRANSACTION_TIME >= '{}' AND CARD_TRANSACTIONS.TRANSACTION_TIME < '{}' 
+                                WHERE CARD_TRANSACTIONS.TRANSACTION_TYPE = 42 AND CARD_CARDS.CARD_CODE = '{}' AND CARD_TRANSACTIONS.TRANSACTION_TIME >= '{}' AND CARD_TRANSACTIONS.TRANSACTION_TIME < '{}' 
                               """.format(CardCode, date_from, date_to))
     records = myfile.fetchall()
     myfile.close()
