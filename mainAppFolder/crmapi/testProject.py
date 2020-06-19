@@ -4,7 +4,7 @@ import pyodbc
 class sqlQuery(threading.Thread):
     def __init__(self,**kwargs):
         threading.Thread.__init__(self)
-        self.server = '11.11.11.16,9433'
+        self.server = '10.1.1.6,9433'
         self.database = 'CRM'
         self.username = 'rk7'
         self.password = 'rk7'

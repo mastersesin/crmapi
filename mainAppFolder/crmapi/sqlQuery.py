@@ -2,7 +2,7 @@ import pyodbc
 from mainAppFolder import app
 from mainAppFolder.crmapi.functions import handle_datetimeoffset
 
-server = '11.11.11.16,9433'
+server = '10.1.1.6,9433'
 database = 'CRM'
 username = 'rk7'
 password = 'rk7'
