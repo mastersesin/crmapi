@@ -191,7 +191,7 @@ def logout(guardMsg):
         return jsonify(msg)
 
 
-@crmapiApp.route('/data', methods=['GET'])
+@crmapiApp.route('/settings', methods=['GET'])
 def setting():
     return jsonify({
         "hotline": "0934 086 638",
