@@ -65,7 +65,7 @@ def login():
             if cardcodeCheckPassword == password:
                 msg = returnMsg.returnMsgTest().return_token
                 if cardcodeCheckPassword == '19801980':
-                    msg['isFirstLogin'] = True
+                    msg['isFirstLogin'] = False
                 else:
                     msg['isFirstLogin'] = False
                 msg['msg'] = functions.generate_auth_token(cardcode, people_id)
