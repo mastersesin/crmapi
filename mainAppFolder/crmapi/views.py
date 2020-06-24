@@ -148,7 +148,8 @@ def cardinfo(guardMsg):
                 record[0]
             try:
                 msg['msg'] = {'CARD_CODE': CARD_CODE, 'PEOPLE_ID': PEOPLE_ID, 'F_NAME': F_NAME, 'L_NAME': L_NAME,
-                              'BIRTHDAY': BIRTHDAY, 'SOURCE': SOURCE, balance_type: float(BALANCE), 'TYPE': cardcode_type,
+                              'BIRTHDAY': BIRTHDAY, 'SOURCE': SOURCE, balance_type: float(BALANCE),
+                              'TYPE': cardcode_type,
                               'RANK': HANG_THE}
             except:  # BALANCE variable can be none but float() not happy with that
                 msg['msg'] = {'CARD_CODE': CARD_CODE, 'PEOPLE_ID': PEOPLE_ID, 'F_NAME': F_NAME, 'L_NAME': L_NAME,
@@ -198,3 +199,13 @@ def logout(guardMsg):
     else:
         msg = returnMsg.returnMsgTest().logout
         return jsonify(msg)
+
+
+@crmapiApp.route('/data', methods=['POST'])
+def setting():
+    return jsonify({
+        "hotline": "0934 086 638",
+        "logo": "http://50.116.1.159/~hy/storage/images/aDs0Rxxau6dqjwlFh2ITPjsEhx0pcwYl2rtSh7o2.png",
+        "address_type_name": "Địa chỉ",
+        "default_city": None
+    })
