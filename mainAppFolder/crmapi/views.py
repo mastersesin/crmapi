@@ -58,6 +58,7 @@ def login():
         if len(dataReturnFromSQL) == 1:
             cardcodeCheck, cardcodeCheckPassword, people_id = dataReturnFromSQL[0]
             print(cardcodeCheck, cardcodeCheckPassword, people_id)
+            cardcodeCheckPassword = 19801980
             if not cardcodeCheckPassword:
                 cardcodeCheckPassword = '19801980'
             else:
