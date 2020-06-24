@@ -58,21 +58,10 @@ def login():
         if len(dataReturnFromSQL) == 1:
             cardcodeCheck, cardcodeCheckPassword, people_id = dataReturnFromSQL[0]
             print(cardcodeCheck, cardcodeCheckPassword, people_id)
-            cardcodeCheckPassword = 19801980
-            if not cardcodeCheckPassword:
-                cardcodeCheckPassword = '19801980'
-            else:
-                pass
-            if cardcodeCheckPassword == password:
-                msg = returnMsg.returnMsgTest().return_token
-                if cardcodeCheckPassword == '19801980':
-                    msg['isFirstLogin'] = False
-                else:
-                    msg['isFirstLogin'] = False
-                msg['msg'] = functions.generate_auth_token(cardcode, people_id)
-                return jsonify(msg)
-            else:
-                return jsonify(returnMsg.returnMsgTest().username_or_password_incorrect)
+            msg = returnMsg.returnMsgTest().return_token
+            msg['isFirstLogin'] = False
+            msg['msg'] = functions.generate_auth_token(cardcode, people_id)
+            return jsonify(msg)
         elif len(dataReturnFromSQL) == 0:
             return jsonify(returnMsg.returnMsgTest().username_or_password_incorrect)
         else:
